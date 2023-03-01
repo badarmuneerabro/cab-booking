@@ -20,58 +20,8 @@ import javax.servlet.http.HttpSession;
  * @author Badar muneer
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
-public class LoginServlet extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException 
-    {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        
-        UserDAO dao = new UserDAO();
-        User user = dao.getUserByUsernameAndPassword(username, password);
-        
-        if(user != null)
-        {
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            int accessLevel = user.getAccessLevel();
-            switch(accessLevel)
-            {
-                case 1: 
-                    forwardRequest("customer/customerPanel", request, response);
-                    break;
-                case 2: 
-                    forwardRequest("driver/driverPanel", request, response);
-                    break;
-                case 3:
-                    forwardRequest("admin/adminPanel", request, response);
-                    break;
-            }
-        }
-        
-        else
-        {
-            request.setAttribute("loginFailed", true);
-            forwardRequest("login", request, response);
-        }
-        
-    }
-    
-    private void forwardRequest(String page, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException
-    {
-        request.getRequestDispatcher("/WEB-INF/jsp/view/" + page + ".jsp").forward(request, response);
-        
-    }
+public class LoginServlet extends HttpServlet 
+{
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -84,8 +34,28 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+            throws ServletException, IOException 
+    {
+        System.out.println("INSIDE LOGIN");
+        if(request.getParameter("logout") != null)
+        {
+            HttpSession session = request.getSession();
+            session.invalidate();
+            response.sendRedirect("cab");
+            return;
+        }
+        HttpSession session = request.getSession();
+        if(session.getAttribute("user") != null)
+        {
+            response.sendRedirect("home");
+            return;
+        }
+        
+        else
+        {
+            request.setAttribute("loginFailed", false);
+            request.getRequestDispatcher("/WEB-INF/jsp/view/login.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -98,8 +68,27 @@ public class LoginServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+            throws ServletException, IOException 
+    {
+        String username = request.getParameter("username");
+        String email = request.getParameter("password");
+        
+        UserDAO dao = new UserDAO();
+        User user = dao.getUserByUsernameAndPassword(username, email);
+        if(user != null)
+        {
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            request.changeSessionId();
+            response.sendRedirect("home");
+            return;
+        }
+        
+        else{
+            request.setAttribute("loginFailed", true);
+            request.getRequestDispatcher("/WEB-INF/jsp/view/login.jsp").forward(request, response);
+        }
+                
     }
 
     /**

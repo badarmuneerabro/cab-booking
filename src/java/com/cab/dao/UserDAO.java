@@ -41,4 +41,58 @@ public class UserDAO
         
         return null;
     }
+    
+    public User insertUser(User user)
+    {
+        String query = "INSERT INTO USERS(username, password, access_level) VALUES(?,?,?);";
+        PreparedStatement statement = Connect.getInstance().getPreparedStatement(query);
+        try 
+        {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setInt(3, user.getAccessLevel());
+            
+            statement.executeUpdate();
+            return user;
+        } catch (SQLException ex) 
+        {
+            System.out.println("ERROR: " + ex.getMessage() + " In inserting User.");
+        }
+        return null;
+    }
+    
+    public User updateUser(User user, String oldUsername)
+    {
+        String query = "UPDATE USERS SET username=?, password=?,access_level=? WHERE username=?;";
+        
+        PreparedStatement statement = Connect.getInstance().getPreparedStatement(query);
+        
+        try {
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getPassword());
+            statement.setInt(3, user.getAccessLevel());
+            statement.setString(4, oldUsername);
+            statement.executeUpdate();
+            return user;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
+    public boolean deleteUser(String username)
+    {
+        String query = "DELETE FROM USERS WHERE username=?;";
+        PreparedStatement statement = Connect.getInstance().getPreparedStatement(query);
+        try {
+            statement.setString(1, username);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false;
+    }
 }

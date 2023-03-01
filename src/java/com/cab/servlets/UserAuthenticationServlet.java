@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.cab.model.User;
+
 /**
  *
  * @author Badar muneer
@@ -33,26 +35,38 @@ public class UserAuthenticationServlet extends HttpServlet {
             throws ServletException, IOException 
     {
         HttpSession session = request.getSession();
-        String email = (String) session.getAttribute("email");
-        
-        if(email == null)
-        {
-            request.setAttribute("loginFailed", false);
-            request.getRequestDispatcher("/WEB-INF/jsp/view/login.jsp").forward(request, response);
+        User user = (User) session.getAttribute("user");
+        int accessLevel = user.getAccessLevel();
+        switch (accessLevel) {
+            case 1:
+                forwardRequest("customer/customerPanel", request, response);
+                break;
+            case 2:
+                forwardRequest("driver/driverPanel", request, response);
+                break;
+            case 3:
+                forwardRequest("admin/adminPanel", request, response);
+                break;
         }
     }
 
+    private void forwardRequest(String page, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        request.getRequestDispatcher("/WEB-INF/jsp/view/" + page + ".jsp").forward(request, response);
+        return;
+
+    }
+
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-/**
- * Handles the HTTP <code>GET</code> method.
- *
- * @param request servlet request
- * @param response servlet response
- * @throws ServletException if a servlet-specific error occurs
- * @throws IOException if an I/O error occurs
- */
-@Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -66,7 +80,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -77,7 +91,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
      * @return a String containing servlet description
      */
     @Override
-public String getServletInfo() {
+    public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

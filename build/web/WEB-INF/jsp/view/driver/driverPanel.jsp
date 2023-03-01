@@ -14,9 +14,18 @@
         <script src="assests/js/bootstrap.bundle.min.js"></script>
     </head>
 
-    <body class="bg-success p-2 text-dark bg-opacity-10 pt-5">
+    <body class="p-2 text-dark pt-5">
+        <div class="container-sm">
+            <a class="btn btn-danger" href="<c:url value="login">
+                 <c:param name="logout" value="logout" />
+          </c:url>">Logout</a>
+        </div>
         <h1 class="text-center mt-5 pt-5">Driver Panel</h1>
-        <div class="alert alert-info text-center mx-auto mt-5 w-25" role="alert"> This is the Driver panel </div>
-    </form>
+        <div class="d-grid gap-4 mx-auto">
+           <%-- Register Driver Panel --%>
+           <a class="btn btn-dark mx-auto" href="<c:url value = "/driver"> 
+                  <c:param name = "action" value="list" />
+              </c:url>">View Assigned jobs</a>
+       </div>
 </body>
 </html>

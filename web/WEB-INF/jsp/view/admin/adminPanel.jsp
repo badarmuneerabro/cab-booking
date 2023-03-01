@@ -9,37 +9,46 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Admin - Alpha Cab</title>
+        <title>Alpha-Cab|Admin</title>
         <link href="assests/css/bootstrap.css" rel="stylesheet">
         <script src="assests/js/bootstrap.bundle.min.js"></script>
     </head>
 
-    <body class="bg-success p-2 text-dark bg-opacity-10 pt-5">
+    <body class="p-2 text-dark bg-opacity-10 pt-5">
+        <div class="container-sm">
+            <a class="btn btn-danger" href="<c:url value="login">
+                 <c:param name="logout" value="logout" />
+          </c:url>">Logout</a>
+        </div>
         <h1 class="text-center mt-5 pt-5 mb-5">Admin Panel</h1>
     <form>
     <div class="d-grid gap-4 mx-auto">
       <%-- Register Driver Panel --%>
-      <a href="\Alpha-Cab\registerNewDriver.jsp">
-      <button type="button" class="btn btn-dark mx-auto" href="\Alpha-Cab\registerNewDriver.jsp">Register New Driver</button>
-      </a>
+          <a class="btn btn-dark mx-auto" href="<c:url value = "/admin/driver"> 
+                 <c:param name = "action" value="register" />
+              </c:url>">Register New Driver</a>
       <%-- Register New Customer Panel --%>
-      <a href="\Alpha-Cab\registerNewCustomer.jsp">
-      <button type="button" class="btn btn-dark mx-auto">Register New Customer</button>
-      </a>
-      <%-- Update Exsiting Drivers Panel --%>
-      <a href="\Alpha-Cab\updateExistingDrivers.jsp">
-      <button type="button" class="btn btn-dark mx-auto">Update Existing Drivers</button>
-      </a>
-      <%-- Update Exsiting Customers Panel --%>
-      <a href="\Alpha-Cab\updateExistingCustomers.jsp">
-      <button type="button" class="btn btn-dark mx-auto">Update Existing Customers</button>
-      </a>
+          <a class="btn btn-dark mx-auto" href="<c:url value="/admin/customer">
+                 <c:param name="action" value="register" />
+          </c:url>">Register New Customer</a>
       <%-- List All Drivers Panel --%>
-      <a href="\Alpha-Cab\listAllDrivers.jsp">
-      <button type="button" class="btn btn-dark mx-auto">List All Drivers</button>
-      </a>
-      <button type="button" class="btn btn-dark mx-auto">List All Customers</button>
-      <button type="button" class="btn btn-dark mx-auto">Assign Drivers To Bookings</button>
+          <a class="btn btn-dark mx-auto" href="<c:url value="/admin/driver">
+                 <c:param name="action" value="list"/>
+          </c:url>">List All Drivers</a>
+          <a href="<c:url value="/admin/customer">
+                 <c:param name="action" value="list" />
+          </c:url>" class="btn btn-dark mx-auto">List All Customers</a>
+          <a class="btn btn-dark mx-auto" href="<c:url value="/admin/booking">
+                 <c:param name="action" value="list" />
+          </c:url>">Assign Bookings</a>
+          
+          <a class="btn btn-dark mx-auto" href="<c:url value="/admin/customer-report">
+                 <c:param name="action" value="report" />
+          </c:url>">Generate Customer Report</a>
+          
+          <a class="btn btn-dark mx-auto" href="<c:url value="/admin/booking">
+                 <c:param name="action" value="price" />
+          </c:url>">Set Price</a>
       </div>
     </form>
 </body>

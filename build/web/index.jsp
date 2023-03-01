@@ -1,1 +1,1 @@
-<c:redirect url="/home"/>
+<c:redirect url="/cab"/>
